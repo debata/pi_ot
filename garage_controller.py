@@ -28,7 +28,7 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH messag
     if decoded_msg == "ACTIVE":
         print("GO")
         GPIO.output(RELAY_PIN, GPIO.LOW)
-        time.sleep(0.01)
+        time.sleep(0.5)
         GPIO.output(RELAY_PIN, GPIO.HIGH)
 
 def main(): 
