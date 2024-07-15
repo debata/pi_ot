@@ -17,7 +17,7 @@ BROKER_ADDRESS="192.168.2.244"
 def main():
 
     print("creating new instance")
-    client = mqtt.Client("TempSensor") #create new instance
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1) #create new instance
     client.on_message=on_message #attach function to callback
     print("connecting to broker")
     client.connect(BROKER_ADDRESS,1883) #connect to broker

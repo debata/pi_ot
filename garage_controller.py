@@ -33,7 +33,8 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH messag
 
 def main(): 
     print("creating new instance")
-    client = mqtt.Client("Garage") #create new instance
+    #client = mqtt.Client("Garage") #create new instance
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1) #create new instance
     client.subscribe(GARAGE_TRIGGER_TOPIC)
     client.on_connect=on_connect
     client.on_message=on_message #attach function to callback
