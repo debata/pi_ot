@@ -8,7 +8,8 @@ GPIO.setmode(GPIO.BCM)
 
 DOOR_PIN=2
 RELAY_PIN=21
-BROKER_ADDRESS="192.168.2.244"
+BROKER_ADDRESS="192.168.2.242"
+#BROKER_ADDRESS="192.168.1.16"
 GARAGE_TRIGGER_TOPIC="pi/garage_opener/trigger"
 # Door sensor
 GPIO.setup(DOOR_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -42,17 +43,16 @@ def main():
     client.connect(BROKER_ADDRESS,1883) #connect to broker
     client.loop_start() #start the loop
     
-    # Setup MQTT HA sensors
-    
-    # Garage Door Sensor
-    base_topic_door="homeassistant/binary_sensor/garage_door/"
-    config_topic_door=base_topic_door + "config"
-    state_topic_door=base_topic_door + "state"
-    print("Publishing config message to topics")
-    payload='{"name": "garage_door", "device_class": "garage_door", "state_topic": "'+state_topic_door+'"}'
-    print(payload)
-    client.publish(config_topic_door,payload,qos=1)
     while True:
+        # Garage Door Sensor
+        base_topic_door="homeassistant/binary_sensor/garage_door/"
+        config_topic_door=base_topic_door + "config"
+        state_topic_door=base_topic_door + "state"
+        print("Publishing config message to topics")
+        payload='{"name": "garage_door", "device_class": "garage_door", "state_topic": "'+state_topic_door+'"}'
+        print(payload)
+        client.publish(config_topic_door,payload,qos=1)
+        
         try:
             # Check door sensor
             state=""

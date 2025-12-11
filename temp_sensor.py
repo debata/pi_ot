@@ -12,7 +12,8 @@ def on_message(client, userdata, message):
     print("message qos=",message.qos)
     print("message retain flag=",message.retain)
     
-BROKER_ADDRESS="192.168.2.244"
+BROKER_ADDRESS="192.168.2.242"
+#BROKER_ADDRESS="192.168.1.16"
 
 def main():
 
@@ -23,29 +24,33 @@ def main():
     client.connect(BROKER_ADDRESS,1883) #connect to broker
     client.loop_start() #start the loop
     
-    # Garage Temperature
-    base_topic="homeassistant/sensor/garage/"
-    base_topic_temp="homeassistant/sensor/garage_temp/"
-    base_topic_humid="homeassistant/sensor/garage_humid/"
-    config_topic_temp= base_topic_temp +"config"
-    config_topic_humid=base_topic_humid +"config"
-    
-    payload='{"device_class": "temperature", "name": "garage_temp", "state_topic": "'+base_topic+'state", "unit_of_measurement": "°C", "value_template": "{{ value_json.temperature}}" }'
-    client.publish(config_topic_temp,payload)
-    print(payload)
-    payload='{"device_class": "humidity", "name": "garage_humidity", "state_topic": "'+base_topic+'state", "unit_of_measurement": "%", "value_template": "{{ value_json.humidity}}" }'
-    client.publish(config_topic_humid,payload)
-    print(payload)
-    
-    # Initial the dht device, with data pin connected to:
-    dhtDevice = adafruit_dht.DHT22(board.D18)
+   
     
     # you can pass DHT22 use_pulseio=False if you wouldn't like to use pulseio.
     # This may be necessary on a Linux single board computer like the Raspberry Pi,
     # but it will not work in CircuitPython.
     # dhtDevice = adafruit_dht.DHT22(board.D18, use_pulseio=False)
-    
+   
+
+    # Initial the dht device, with data pin connected to:
+    dhtDevice = adafruit_dht.DHT22(board.D18, use_pulseio=False)
+
     while True:
+      # Garage Temperature
+        base_topic="homeassistant/sensor/garage/"
+        base_topic_temp="homeassistant/sensor/garage_temp/"
+        base_topic_humid="homeassistant/sensor/garage_humid/"
+        config_topic_temp= base_topic_temp +"config"
+        config_topic_humid=base_topic_humid +"config"
+        
+        payload='{"device_class": "temperature", "name": "garage_temp", "state_topic": "'+base_topic+'state", "unit_of_measurement": "°C", "value_template": "{{ value_json.temperature}}" }'
+        client.publish(config_topic_temp,payload)
+        print(payload)
+        
+        payload='{"device_class": "humidity", "name": "garage_humidity", "state_topic": "'+base_topic+'state", "unit_of_measurement": "%", "value_template": "{{ value_json.humidity}}" }'
+        client.publish(config_topic_humid,payload)
+        print(payload)
+           
         try:
             # Read temperature and humidity
             temperature_c = dhtDevice.temperature
